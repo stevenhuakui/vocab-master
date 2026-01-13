@@ -1,39 +1,56 @@
 # VocabMaster Deployment Guide
 
-## Option 1: Cloudflare Pages (Recommended for China)
-Cloudflare's network is often more accessible in China than Vercel.
+## 🇨🇳 China Access Solution: Buying a Domain (Recommended)
+Since free domains like `*.pages.dev` and `*.edgeone.cool` (temporary) are often blocked or limited in China, the **most reliable solution** is to buy a cheap domain (about $5-10/year).
 
-1.  **Push to GitHub**:
-    - Ensure your code is on GitHub.
+1.  **Buy a Domain**: Go to Namecheap, GoDaddy, or Tencent Cloud and buy a domain (e.g., `steven-vocab.com`).
+2.  **Connect to Cloudflare Pages**:
+    - Go to your Cloudflare Pages project (`vocab-master`).
+    - Click **Custom Domains**.
+    - Enter your new domain.
+    - Follow instructions to update DNS.
+3.  **Result**: Your custom domain will work permanently and is usually **accessible in China**.
 
-2.  **Go to Cloudflare Dashboard**:
-    - Log in to [dash.cloudflare.com](https://dash.cloudflare.com).
-    - Go to **Workers & Pages** -> **Create Application**.
-    - Select **Pages** tab -> **Connect to Git**.
-    - Select your `vocab-master` repository.
+---
 
-3.  **Configure Builds**:
-    - **Project Name**: `vocab-master` (or whatever you like)
-    - **Framework Preset**: `Vite`
-    - **Build Command**: `npm run build`
-    - **Build Output Directory**: `dist`
-    - **Root Directory**: `.` (or leave empty)
+## Option 0: Tencent Cloud EdgeOne Pages (Fastest, but Domain Required)
+**WARNING**: The free default domain is **temporary (3 hours only)**.
+- Use this only to **test** quickly if the app works on your sister's phone.
+- For a permanent link, you must buy a customized domain OR use Cloudflare Pages (Option 1).
 
-4.  **Deploy**:
-    - Click **Save and Deploy**.
+1.  **Build Locally**:
+    - In your project, run: `npm run build`
+    - This will generate a `dist` folder.
 
-**Troubleshooting errors**:
-- If you see `Missing entry-point to Worker script`, ensure you are creating a **Pages** project, NOT a Worker.
-- Do NOT add `wrangler deploy` to your build command. Cloudflare handles the upload of the `dist` folder automatically.
+2.  **Go to Tencent Cloud EdgeOne**:
+    - Select **EdgeOne Pages**.
+    - **Upload Directory**: Upload your `dist` folder.
+    - **Result**: You get a 3-hour preview link. Good for a quick test.
 
-## Option 2: Vercel
-1.  Go to [vercel.com](https://vercel.com).
-2.  Import project from GitHub.
-3.  Framework: Vite.
-4.  Deploy.
-*Note: Vercel domains might be blocked in China.*
+## Option 1: GitHub Pages (Free & Reliable)
+This is a great free option that works moderately well in China.
 
-## Option 3: Local Transfer
+1.  **Configuration**: I have already updated `vite.config.ts` to use `/vocab-master/` as the base path.
+2.  **Push Code**:
+    ```bash
+    git add .
+    git commit -m "config: update for github pages"
+    git push
+    ```
+3.  **Enable Pages**:
+    - Go to your repository on GitHub.
+    - Click **Settings** (top right) > **Pages** (left sidebar).
+    - Under **Build and deployment**, set Source to **Deploy from a branch**.
+    - Select **Branch**: `main` and folder `/ (root)`.
+    - Click **Save**.
+4.  **Wait**:
+    - It will take about 1-2 minutes.
+    - Refresh the page to see your link (usually `https://username.github.io/vocab-master/`).
+
+## Option 2: Cloudflare Pages (With Custom Domain)
+If you bought a domain (recommended for best speed), use Cloudflare. Since we added the base path for GitHub, you might need to change it back to `/` for Cloudflare if you map it to the root of your domain.
+
+## Option 3: Local Transfer (Offline)
 1.  Run `npm run build` locally.
 2.  Send the `dist` folder to your sister.
 3.  She can run it using a local server (e.g., `http-server` or `serve`).
